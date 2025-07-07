@@ -51,12 +51,18 @@ the job’s status and results.
    #  - SECRET_KEY (Django)
    #  - OPENAI_API_KEY
    #  - DATABASE_URL, REDIS_URL
+   #  - Generate SECRET_KEY using command - 
+        python3 -c "import secrets; print(secrets.token_urlsafe(50))" 
    ```
 
 3. **Build & run**
 
    ```bash
    docker-compose up --build -d
+   ```
+
+   ```bash
+    docker-compose run --rm web python manage.py migrate
    ```
 
 4. **Verify**
