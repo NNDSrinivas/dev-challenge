@@ -21,6 +21,20 @@ the job’s status and results.
 
 ---
 
+## Architecture & Design
+
+- **Django + DRF** for rapid API scaffolding, validation, and auto-generated OpenAPI.  
+- **Celery + Redis** to decouple job submission from processing and enable concurrency.  
+- **PostgreSQL** to persist job metadata: status, summary, checklist.  
+- **OpenAI v1 SDK** drives a two-step GPT chain: first summarize the input, then generate a checklist.  
+- **Resiliency**: OpenAI errors mark jobs as **FAILED** immediately; unexpected exceptions trigger up to 3 retries before failing.
+
+## AI-Assisted Development
+
+- **GitHub Copilot** scaffolded serializers, views, Celery config, and tests.  
+- **Claude** drafted the Mermaid flowchart below.  
+- **Copilot & Playground** iterated on `.coveragerc` and test coverage targets.
+
 ## Quickstart
 
 1. **Clone & enter**  
@@ -168,11 +182,33 @@ Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
 
 ---
 
+## Architecture Diagram
+
+```mermaid
+flowchart LR
+  subgraph Client
+    A[POST /jobs] -->|event_id| B[Django API]
+    A2[GET /jobs/{id}] -->|fetch status| B
+  end
+  subgraph API & Queue
+    B -->|save pending| DB[(Postgres)]
+    B -->|enqueue| Q[(Redis)]
+  end
+  subgraph Worker
+    Q --> W[Celery Worker]
+    W -->|summarize| O1[OpenAI: summarize]
+    W -->|checklist| O2[OpenAI: checklist]
+    O1 --> W
+    O2 --> W
+    W -->|save results| DB
+  end
+  DB --> B
+  B --> A2
+
+---
+
 ## License
 
 This project is licensed under the **MIT License**—see [LICENSE](LICENSE).
 
 ---
-
-
-# dev-challenge
