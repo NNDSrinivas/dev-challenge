@@ -170,42 +170,32 @@ Aim: ≥70% coverage across all application code.
 
 ---
 
-## Admin UI (optional)
-
-To inspect jobs via Django admin:
-
-```bash
-docker-compose run --rm web python manage.py createsuperuser
-```
-
-Visit [http://localhost:8000/admin/](http://localhost:8000/admin/)
-
----
-
 ## Architecture Diagram
 
 ```mermaid
 flowchart LR
   subgraph Client
-    A[POST /jobs] -->|event_id| B[Django API]
-    A2[GET /jobs/{id}] -->|fetch status| B
+    A["POST /jobs"] -->|event_id| B["Django API"]
+    A2["GET /jobs/{id}"] -->|fetch status| B
   end
-  subgraph API & Queue
+
+  subgraph "API & Queue"
     B -->|save pending| DB[(Postgres)]
     B -->|enqueue| Q[(Redis)]
   end
+
   subgraph Worker
-    Q --> W[Celery Worker]
-    W -->|summarize| O1[OpenAI: summarize]
-    W -->|checklist| O2[OpenAI: checklist]
+    Q --> W["Celery Worker"]
+    W -->|summarize| O1["OpenAI: summarize"]
+    W -->|checklist| O2["OpenAI: checklist"]
     O1 --> W
     O2 --> W
     W -->|save results| DB
   end
+
   DB --> B
   B --> A2
-
----
+```
 
 ## License
 
