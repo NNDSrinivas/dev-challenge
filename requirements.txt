@@ -1,0 +1,10 @@
+django>=4.2,<5.0
+djangorestframework
+celery[redis]
+psycopg2-binary
+django-environ
+drf-spectacular
+openai
+gunicorn
+coverage
+

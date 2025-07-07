@@ -1,0 +1,11 @@
+[run]
+# Measure only your app code
+source = api, jobs
+
+# Omit tests, management scripts, and ASGI/WGI stubs
+omit =
+    */tests.py
+    manage.py
+    main.py
+    api/asgi.py
+    api/wsgi.py
