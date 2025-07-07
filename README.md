@@ -1,7 +1,11 @@
 ````markdown
 # Dev Challenge: Async Job Processing API
 
-I built a minimal backend service to demonstrate a clean, pragmatic approach to handling asynchronous “jobs” with AI. You can POST arbitrary guideline text, have a worker run a two-step GPT chain (summarize → checklist), then retrieve the job’s status and results.
+I built a minimal backend service to demonstrate a clean, pragmatic approach
+to handling asynchronous “jobs” with AI. You can POST arbitrary guideline text,
+have a worker run a two-step GPT chain (summarize → checklist), then retrieve
+the job’s status and results.
+
 
 ---
 
